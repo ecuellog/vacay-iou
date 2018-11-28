@@ -180,7 +180,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  login works!\n</p>\n"
+module.exports = "<div>\n  <h1> Login </h1>\n  <form>\n    <label>Name</label>\n    <input type=\"text\" name=\"name\" placeholder=\"name\">\n    <label>Email</label>\n    <input type=\"text\" name=\"name\" placeholder=\"name\">\n    <label>Password</label>\n    <input type=\"password\" name=\"name\" placeholder=\"name\">\n  </form>\n</div>\n"
 
 /***/ }),
 
@@ -297,7 +297,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/edgardo/workspace/fudo-v2/web/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /home/edgardo/workspace/vacayIOU/web/src/main.ts */"./src/main.ts");
 
 
 /***/ })
