@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var user = require('./user');
+var users = require('./users');
 var auth = require('./auth');
+var ledgers = require('./ledgers');
 
-router.use('/user', user);
+router.use('/users', users);
 router.use('/auth', auth);
+router.use('/ledgers', ledgers);
 
 module.exports = router

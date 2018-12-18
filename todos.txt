@@ -1,0 +1,3 @@
+TODOS:
+- Have consistent error handling in back end.
+- Make sure all errors are handled gracefully.

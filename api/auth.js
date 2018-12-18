@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken');
 var router = express.Router();
 var config = require('../config');
 var User = require('../models/user');
+var tokens = require('../tokens');
 
 //Create new user
 router.post('/register', (req, res) => {
@@ -19,8 +20,8 @@ router.post('/register', (req, res) => {
 
 	User.findByEmailLogin(email, (err, user) => {
 		if(user){
-			return res.status(409).json({
-				message: 'Email already in use'
+			return res.status(200).json({
+            	message: 'Email already in use'
 			});
 		}
 		let saltRounds = 10;
@@ -34,10 +35,11 @@ router.post('/register', (req, res) => {
 			});
 
 			newUser.save(err => {
-				if(err){
-					return res.status(500).json({message: 'Server Error: ' + err});
-				}
-				return res.status(200).json({user: newUser});
+				if(err) return next(err);
+				return res.status(200).json({
+                    message: 'Sign up successful',
+                    user: newUser
+                });
 			});
 		});
 	});
@@ -54,20 +56,26 @@ router.post('/login', (req, res) => {
     	});
     }
 	User.findByEmailLogin(email, (err, user) => {
-		if(err){
-			return res.status(401).json({
+        if(err) return next(err);
+		if(!user){
+			return res.status(400).json({
 				message: 'Failed to log in'
 			});
 		}
 		bcrypt.compare(password, user.passwordHash, (err, valid) => {
 			if(valid){
-				let token = jwt.sign({ user_id: user._id }, config.jwtSecret);
+				let newTokens = tokens.createNewTokens(user._id);
+                if(newTokens == null){
+                    return res.status(500).json({
+                        message: 'Error creating tokens'
+                    })
+                }
+                tokens.setTokenCookies(res, newTokens);
 				return res.status(200).json({
-					message: 'Login successful',
-					app_token: token
+					message: 'Login successful'
 				});
 			} else {
-				return res.status(401).json({
+				return res.status(200).json({
 					message: 'Failed to log in'
 				});
 			}

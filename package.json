@@ -1,5 +1,5 @@
 {
-  "name": "fudo-v2",
+  "name": "vacayIOU",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -13,10 +13,15 @@
   "dependencies": {
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
+    "console-error": "0.0.4",
+    "console-info": "0.0.5",
+    "cookie-parser": "^1.4.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.3.14",
-    "path": "^0.12.7"
+    "morgan": "^1.9.1",
+    "path": "^0.12.7",
+    "rand-token": "^0.4.0"
   }
 }

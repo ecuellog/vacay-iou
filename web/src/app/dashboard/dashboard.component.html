@@ -1,0 +1,15 @@
+<h1> dashboard </h1>
+<p> Here we will get all the trips </p>
+<p> Users will be able to click one and see its details (and all the ious/calculations within that trip/get-together/shindig/vacation/gathering </p>
+
+<ul>
+    <li *ngFor="let ledger of ledgers">
+        {{ledger.name}}
+    </li>
+</ul>
+
+<form (ngSubmit)="createLedger()">
+    <label>Name</label>
+    <input type="text" name="name" [(ngModel)]="newLedger.name">
+    <button type="submit">Add</button>
+</form>
