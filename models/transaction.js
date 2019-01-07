@@ -3,19 +3,21 @@ var mongoose = require('mongoose');
 var transaction = new mongoose.Schema({
     name: String,
     date: Date,
-    whoPaid: [String],        //ID of user or nonUser
-    whoBenefited: [String],   //ID of user or nonUser
+    whoPaid: [String],        //Name of person
+    whoBenefited: [String],   //Name of person
     type: {
         type: String,
         enum: ['expense', 'payment']
     },
-    creator: String,
+    amountDollars: int,
+    amountCents: int,
+    //creator: String,        //For now, a single transaction can't be made without a ledger
     ledger: String
 });
 
-transactionSchema.statics.findByCreator = function(userId, callback){
+/*transactionSchema.statics.findByCreator = function(userId, callback){
     return this.find({ creator: userId }).exec(callback);
-}
+}*/
 
 transactionSchema.statics.findByLedger = function(ledgerId, callback){
     return this.find({ ledger: ledgerId }).exec(callback);

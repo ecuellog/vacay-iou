@@ -14,12 +14,14 @@ import { AuthGuard } from './services/guards/auth-guard.service';
 import { AuthService } from './services/auth.service';
 import { LedgerService } from './services/ledger.service';
 import { HttpTokenInterceptor } from './interceptors/http-token-interceptor';
+import { LedgerComponent } from './ledger/ledger.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    LedgerComponent
   ],
   imports: [
     BrowserModule,

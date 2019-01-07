@@ -99,7 +99,7 @@ var createNewTokens = function(userId){
         csrf_token: csrfToken
     }, config.jwtSecret,
     {
-        expiresIn: '15m' //TODO: change to 15m
+        expiresIn: '15m'
     });
 
     let tokens= {

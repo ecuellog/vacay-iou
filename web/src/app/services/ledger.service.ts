@@ -22,6 +22,10 @@ export class LedgerService {
         return this.http.get(API_URL + '/ledgers/created');
     }
 
+    get(id){
+        return this.http.get(API_URL + '/ledgers/' + id);
+    }
+
     create(body){
         return this.http.post(API_URL + '/ledgers', body);
     }

@@ -41,7 +41,7 @@ app.get('/', function(req, res, next){
 	res.send('Landing page');
 });
 
-app.get('/app/*', function(req, res, next){
+app.get('/app*', function(req, res, next){
 	res.sendFile(path.join(__dirname,'public/index.html'));
 });
 

@@ -26,7 +26,7 @@ router.get('/shared', tokens.checkTokens, (req, res) => {
 //Get single user ledger
 router.get('/:ledgerId', (req, res) => {
     //Should have a locked field in case the creator doesnt want to share it by link. But for now, itll be available for everyone to see
-    Ledger.findById(ledgerId, (err, ledger) => {
+    Ledger.findById(req.params.ledgerId, (err, ledger) => {
         if(err){
             return res.status(500).json({error: err});
         }
@@ -41,7 +41,8 @@ router.post('/', tokens.checkTokens, (req, res, next) => {
     var newLedger = new Ledger({
         name: req.body.name,
         creator: req.decoded.user_id,
-        extraUsers: req.body.extraUsers,
+        persons: req.body.persons,
+        sharedWith: [],
         transactions: []
     });
 
