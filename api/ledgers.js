@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var tokens = require('../tokens');
 var Ledger = require('../models/ledger');
+var transactions = require('./transactions');
 
 //Get all user created ledgers
 router.get('/created', tokens.checkTokens, (req, res) => {
@@ -53,5 +54,7 @@ router.post('/', tokens.checkTokens, (req, res, next) => {
         });
     });
 });
+
+router.use('/:ledgerId/transactions', transactions);
 
 module.exports = router;

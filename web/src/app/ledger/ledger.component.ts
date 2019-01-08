@@ -26,5 +26,4 @@ export class LedgerComponent implements OnInit {
             console.log(res);
         });
     }
-
 }

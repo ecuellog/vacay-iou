@@ -4,8 +4,7 @@ var ledgerSchema = new mongoose.Schema({
 	name: String,
 	creator: String,
 	persons: [{type: String, unique: true}],
-    sharedWith: [String],
-    transactions: [String]
+    sharedWith: [String]
 });
 
 ledgerSchema.statics.findCreated = function(userId, callback) {

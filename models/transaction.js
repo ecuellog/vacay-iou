@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var transaction = new mongoose.Schema({
+var transactionSchema = new mongoose.Schema({
     name: String,
     date: Date,
     whoPaid: [String],        //Name of person
@@ -9,8 +9,8 @@ var transaction = new mongoose.Schema({
         type: String,
         enum: ['expense', 'payment']
     },
-    amountDollars: int,
-    amountCents: int,
+    amountDollars: Number,
+    amountCents: Number,
     //creator: String,        //For now, a single transaction can't be made without a ledger
     ledger: String
 });
