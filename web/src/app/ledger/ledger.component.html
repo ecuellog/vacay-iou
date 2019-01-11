@@ -1,7 +1,18 @@
 <h1>
-  Ledger - {{ ledger.name }}
+    Ledger - {{ ledger.name }}
 </h1>
 
 <p>Here goes the summary of who pays who.</p>
 
 <p>Here will be a list of all the transactions</p>
+
+<form (ngSubmit)="createTransaction()">
+    <label> Name </label><br>
+    <input type="text" name="name" [(ngModel)]="newTransaction.name"><br>
+    <label> Dollars </label><br>
+    <input type="number" name="amountDollars" [(ngModel)]="newTransaction.amountDollars"><br>
+    <label> Cents </label><br>
+    <input type="number" name="amountCents" [(ngModel)]="newTransaction.amountCents"><br>
+    <br>
+    <button type="submit"> Add Transaction </button>
+</form>

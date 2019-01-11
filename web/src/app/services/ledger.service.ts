@@ -22,11 +22,19 @@ export class LedgerService {
         return this.http.get(API_URL + '/ledgers/created');
     }
 
-    get(id){
-        return this.http.get(API_URL + '/ledgers/' + id);
+    get(ledgerId){
+        return this.http.get(API_URL + '/ledgers/' + ledgerId);
     }
 
     create(body){
         return this.http.post(API_URL + '/ledgers', body);
+    }
+
+    getAllTransactions(ledgerId){
+        return this.http.get(API_URL + '/ledgers/' + ledgerId + '/transactions');
+    }
+
+    createTransaction(ledgerId, body){
+        return this.http.post(API_URL + '/ledgers/' + ledgerId + '/transactions', body);
     }
 }

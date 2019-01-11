@@ -1,5 +1,5 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router({mergeParams: true});
 var tokens = require('../tokens');
 var Transaction = require('../models/transaction');
 var Ledger = require('../models/ledger')
@@ -7,6 +7,29 @@ var Ledger = require('../models/ledger')
 /* Nested from /ledgers/:ledgerId/transactions */
 
 //List all ledger transactions
+router.get('/', tokens.checkTokens, (req, res, next) => {
+    console.log('ledgerId');
+    console.log(req.params.ledgerId);
+    Ledger.findById(req.params.ledgerId, (err, ledger) => {
+        if(err) return next(err);
+        if(!ledger){
+            return res.status(404).json({
+                message: 'Ledger not found'
+            });
+        }
+        if(req.decoded.user_id !== ledger.creator){
+            return res.status(401).json({
+                message: 'Unauthorized'
+            });
+        }
+        Transaction.findByLedger(ledger._id, (err, transactions) => {
+            if(err) return next(err);
+            return res.status(200).json({
+                transactions: transactions
+            });
+        });
+    });
+});
 
 //Get single transaction
 router.get('/:transactionId', (req, res, next) => {
@@ -36,20 +59,24 @@ router.get('/:transactionId', (req, res, next) => {
 //Create a transaction in this ledger
 router.post('/', tokens.checkTokens, (req, res, next) => {
     //Verify if user owns this ledger (for later, + verify if ledger is shared with user and ledger is editable by user)
-
-    Ledger.findById(req.params.ledgerId), (err, ledger) => {
+    console.log('tokens checked');
+    console.log(req.params.ledgerId);
+    Ledger.findById(req.params.ledgerId, (err, ledger) => {
+        console.log('finding ledger...')
+        console.log(err, ledger);
         if(err) return next(err);
-        if(ledger.user_id !== req.decoded.user_id){
+        if(ledger.creator !== req.decoded.user_id){
             return res.status(401).json({
                 message: 'Unauthorized'
             });
         }
         return next();
-    }
+    });
 }, (req, res, next) => {
     var newTransaction = new Transaction({
         name: req.body.name,
         date: Date.now(),
+        //We should be checking that the whoPaid and whoBenefited exists in ledger.persons
         whoPaid: req.body.whoPaid,
         whoBenefited: req.body.whoBenefited,
         type: req.body.type,

@@ -1,3 +1,9 @@
 TODOS:
 - Have consistent error handling in back end.
 - Make sure all errors are handled gracefully.
+- Logout:
+    Front-end: delete the cookies.
+    Back-end: Delete refresh token from user.
+
+-Bug: After a while, user can access dashboard, but the request to get all ledgers returns 401 (Unauthorized)
+-Bug: When refresh token expires, invalid refresh token.
