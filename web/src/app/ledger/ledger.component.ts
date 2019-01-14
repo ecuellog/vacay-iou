@@ -8,8 +8,8 @@ import { LedgerService } from '../services/ledger.service';
     styleUrls: ['./ledger.component.scss']
 })
 export class LedgerComponent implements OnInit {
-    ledger: any;
-    transactions = {};
+    ledger = {};
+    transactions = [];
     newTransaction: any = {
         type: "",
         whoPaid: ['Ed'],

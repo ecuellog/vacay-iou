@@ -80,8 +80,8 @@ router.post('/', tokens.checkTokens, (req, res, next) => {
         whoPaid: req.body.whoPaid,
         whoBenefited: req.body.whoBenefited,
         type: req.body.type,
-        amountDollars: req.body.dollars,
-        amountCents: req.body.cents,
+        amountDollars: req.body.amountDollars,
+        amountCents: req.body.amountCents,
         ledger: req.params.ledgerId
     });
 
