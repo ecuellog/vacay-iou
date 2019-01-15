@@ -7,7 +7,7 @@ import { LedgerService } from '../services/ledger.service';
     styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-    ledgers: any;
+    ledgers: any = {};
     newLedger: any = {
         persons: []
     };

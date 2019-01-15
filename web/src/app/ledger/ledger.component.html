@@ -6,12 +6,14 @@
 
 <p>Here will be a list of all the transactions</p>
 
+<hr>
 <div *ngFor="let transaction of transactions">
-    <h2> {{ transaction.name }}</h2>
+    <h2> {{ transaction.name }} </h2>
     <p>
         $<span>{{ transaction.amountDollars }}</span>.
         <span>{{ transaction.amountCents }}</span>
     </p>
+    <hr>
 </div>
 
 <form (ngSubmit)="createTransaction()">
@@ -22,5 +24,21 @@
     <label> Cents </label><br>
     <input type="number" name="amountCents" [(ngModel)]="newTransaction.amountCents"><br>
     <br>
+
+    <label>Who Paid?</label>
+    <div *ngFor="let person of ledger.persons; index as i">
+        <input type="checkbox" name="person" [(ngModel)]="personsPaid[i]">
+        <label> {{ person }} </label>
+    </div>
+
+    <label>Who Benefited?</label>
+    <div *ngFor="let person of ledger.persons; index as i">
+        <input type="checkbox" name="person" [(ngModel)]="personsBenefited[i]">
+        <label> {{ person }} </label>
+    </div>
+
+    <h5>{{ personsPaid }}</h5>
+    <h5>{{ personsBenefited }}</h5>
+
     <button type="submit"> Add Transaction </button>
 </form>
