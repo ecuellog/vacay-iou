@@ -4,6 +4,10 @@ TODOS:
 - Logout:
     Front-end: delete the cookies.
     Back-end: Delete refresh token from user.
+- Bug: After a while, user can access dashboard, but the request to get all ledgers returns 401 (Unauthorized)
+- Bug: When refresh token expires, invalid refresh token.
+- When creating a new ledger, add the creator's name to the person array.
 
--Bug: After a while, user can access dashboard, but the request to get all ledgers returns 401 (Unauthorized)
--Bug: When refresh token expires, invalid refresh token.
+FOR FUTURE:
+- Have an array of refresh tokens instead of just one so that users can have multiple sessions open.
+- Check if random number generated for ID's is already present on database?

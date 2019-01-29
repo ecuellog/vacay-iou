@@ -12,6 +12,20 @@ router.get('/', /*middleware.checkToken,*/ (req, res) => {
 	})
 });
 
+//Get authenticated user
+router.get('/current', tokens.checkTokens, (req, res) => {
+	User.findById(req.decoded.user_id, (err, user) => {
+		if(err){
+			return res.status(404).json({
+				message: 'User not found'
+			});
+		}
+		return res.status(200).json({
+			user: user
+		});
+	});
+});
+
 //Get single user
 router.get('/:userId', tokens.checkTokens, (req, res) => {
 	if(req.decoded.user_id != userId) {

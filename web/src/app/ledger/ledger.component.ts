@@ -10,16 +10,13 @@ import { LedgerService } from '../services/ledger.service';
 export class LedgerComponent implements OnInit {
     ledger: any = {};
     transactions = [];
+    balances = new Map();
 
     //Used for transaction creation
     personsPaid: boolean[] = [];
     personsBenefited: boolean[] = [];
     
-    newTransaction: any = {
-        type: "",
-        whoPaid: [],
-        whoBenefited: []
-    };
+    newTransaction: any;
 
     id = this.route.snapshot.paramMap.get('id');
 
@@ -32,6 +29,7 @@ export class LedgerComponent implements OnInit {
     ngOnInit() {
         this.queryLedger();
         this.queryTransactions();
+        this.resetNewTransaction();
     }
 
     queryLedger(){
@@ -48,6 +46,30 @@ export class LedgerComponent implements OnInit {
         this.ledgerService.getAllTransactions(this.id).subscribe((res:any) => {
             this.transactions = res.transactions;
             console.log(res);
+            this.calculateSummary();
+        });
+    }
+
+    resetNewTransaction(){
+        this.newTransaction = {
+            type: "",
+            whoPaid: [],
+            whoBenefited: []
+        };
+    }
+
+    calculateSummary(){
+        this.ledger.persons.forEach(person => {
+            this.balances.set(person, 0);
+            this.transactions.forEach(transaction => {
+                if(transaction.whoPaid.includes(person)){
+                    this.balances.set(person, this.balances.get(person) + transaction.amountDollars/transaction.whoPaid.length);
+                }
+                if(transaction.whoBenefited.includes(person)){
+                    this.balances.set(person, this.balances.get(person) - transaction.amountDollars/transaction.whoBenefited.length);
+                }
+            });
+            console.log(this.balances.get(person));
         });
     }
 
@@ -60,7 +82,7 @@ export class LedgerComponent implements OnInit {
         this.newTransaction.type = 'expense';
         this.ledgerService.createTransaction(this.id, this.newTransaction).subscribe((res:any) => {
             console.log(res.message);
-            this.newTransaction = {};
+            this.resetNewTransaction();
             this.queryTransactions();
         });
     }

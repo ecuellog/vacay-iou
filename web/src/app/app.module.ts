@@ -13,6 +13,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AuthGuard } from './services/guards/auth-guard.service';
 import { AuthService } from './services/auth.service';
 import { LedgerService } from './services/ledger.service';
+import { UserService } from './services/user.service';
 import { HttpTokenInterceptor } from './interceptors/http-token-interceptor';
 import { LedgerComponent } from './ledger/ledger.component';
 
@@ -34,7 +35,8 @@ import { LedgerComponent } from './ledger/ledger.component';
     CookieService,
     AuthGuard,
     AuthService,
-    LedgerService
+    LedgerService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })
