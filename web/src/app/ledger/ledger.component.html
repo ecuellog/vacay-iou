@@ -5,7 +5,7 @@
 <p>Here goes the summary of who pays who.</p>
 <div *ngFor="let person of ledger.persons">
     <h4>{{ person }}</h4>
-    <p>{{ balances.get(person) }}</p>
+    <p>{{ balances.get(person).total }}</p>
 </div>
 
 <p>Here will be a list of all the transactions</p>

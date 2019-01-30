@@ -33,6 +33,7 @@ var checkTokens = function(req, res, next) {
                 req.decoded = decoded;
                 refreshTokens(decoded, refreshToken, (err, newTokens) => {
                     if(err){
+                        console.error('Error refresing tokens: ' + err);
                         return res.status(401).json({
                             message: 'Token expired. Invalid refresh token'
                         });

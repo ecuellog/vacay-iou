@@ -60,15 +60,28 @@ export class LedgerComponent implements OnInit {
 
     calculateSummary(){
         this.ledger.persons.forEach(person => {
-            this.balances.set(person, 0);
+            this.balances.set(person, {
+                dollars: 0,
+                cents: 0,
+                total: 0
+            });
             this.transactions.forEach(transaction => {
                 if(transaction.whoPaid.includes(person)){
-                    this.balances.set(person, this.balances.get(person) + transaction.amountDollars/transaction.whoPaid.length);
+                    let newAmounts = this.balances.get(person);
+                    newAmounts.dollars += transaction.amountDollars/transaction.whoPaid.length;
+                    newAmounts.cents += transaction.amountCents/transaction.whoPaid.length;
+                    this.balances.set(person, newAmounts);
                 }
                 if(transaction.whoBenefited.includes(person)){
-                    this.balances.set(person, this.balances.get(person) - transaction.amountDollars/transaction.whoBenefited.length);
+                    let newAmounts = this.balances.get(person);
+                    newAmounts.dollars -= transaction.amountDollars/transaction.whoBenefited.length;
+                    newAmounts.cents -= transaction.amountCents/transaction.whoBenefited.length;
+                    this.balances.set(person, newAmounts);
                 }
             });
+            let newTotal = this.balances.get(person);
+            newTotal.total = newTotal.dollars + (newTotal.cents / 100);
+            this.balances.set(person, newTotal);
             console.log(this.balances.get(person));
         });
     }
