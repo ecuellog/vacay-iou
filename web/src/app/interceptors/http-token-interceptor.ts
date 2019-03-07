@@ -13,7 +13,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
         console.log("intercepted request ... ");
         const modified = req.clone({setHeaders: {'x-csrf-token': this.cookies.get('csrf-token')}});
 
-        //send the newly created request
+        //send the cloned request (same request with the csrf header)
         return next.handle(modified);
     }
 }

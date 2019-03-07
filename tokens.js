@@ -5,14 +5,18 @@ var randToken = require('rand-token');
 var bcrypt = require('bcrypt');
 var config = require('./config');
 var User = require('./models/user');
+var RefreshTokenStore = require('./models/refreshTokenStore');
 
 var checkTokens = function(req, res, next) {
     var accessToken = req.cookies['access-token'];
     var refreshToken = req.cookies['refresh-token'];
     var csrfToken = req.headers['x-csrf-token'];
-
+    
     if (accessToken) {
+        //Verify the access token
         jwt.verify(accessToken, config.jwtSecret, (err, decoded) => {
+
+            //Access token valid
             if(err == null){
                 if(decoded.csrf_token !== csrfToken){
                     return res.status(401).json({
@@ -22,6 +26,8 @@ var checkTokens = function(req, res, next) {
                 req.decoded = decoded;
                 return next();
             }
+
+            //Access Token Expired
             if (err.name === 'TokenExpiredError') {
                 decoded = jwt.decode(accessToken);
                 if(decoded.csrf_token !== csrfToken){
@@ -41,7 +47,10 @@ var checkTokens = function(req, res, next) {
                     setTokenCookies(res, newTokens);
                     return next();
                 });
-            } else {
+            }
+
+            //Access token invalid    
+            else {
                 return res.status(401).json({
                     message: 'Invalid token'
                 });
@@ -55,44 +64,25 @@ var checkTokens = function(req, res, next) {
 };
 
 var refreshTokens = function(atPayload, rt, callback){
-    //check if refresh token exists in DB
-    User.findById(atPayload.user_id, (err, user) => {
-        if(!user){
-            let error = new Error('No user found');
-            return callback(error, null);
-        } else {
-            bcrypt.compare(rt, user.refreshTokenHash, (err, valid) => {
+    RefreshTokenStore.validate(atPayload.user_id, rt, (err, valid) => {
+        if(err){
+            return callback(err, null);
+        }
+        if(valid){
+            createNewTokens(atPayload.user_id, rt, (err, newTokens) => {
                 if(err){
-                    let error = new Error('Error comparing hashes: ' + err);
-                    return callback(error, null);
+                    return callback(err, null);
                 }
-                if(valid){
-                    let newTokens = createNewTokens(user._id);
-                    return callback(null, newTokens);
-                } else {
-                    let error = new Error('Refresh token invalid');
-                    return callback(error, null);
-                }
+                return callback(null, newTokens);
             });
+        } else {
+            let error = new Error('Refresh token invalid');
+            return callback(error, null);
         }
     });
 };
 
-var createNewTokens = function(userId){
-    let refreshToken = randToken.generate(16);
-    bcrypt.hash(refreshToken, config.saltRounds, (err, hash) => {
-        if(err){
-            console.error('Error hashing refresh token: ' + err);
-            return null;
-        }
-        User.findByIdAndUpdate(userId, { refreshTokenHash: hash }, (err) => {
-            if(err){
-                console.error('Error setting user refresh token: ' + err);
-                return null;
-            }
-        })
-    })
-
+var createNewTokens = function(userId, oldRt, callback){
     let csrfToken = randToken.generate(16);
 
     let accessToken = jwt.sign({
@@ -100,22 +90,48 @@ var createNewTokens = function(userId){
         csrf_token: csrfToken
     }, config.jwtSecret,
     {
-        expiresIn: '15m'
+        expiresIn: '15m' //testing 5s, real 15m.
     });
 
     let tokens= {
         accessToken: accessToken,
-        refreshToken: refreshToken,
+        refreshToken: oldRt,
         csrfToken: csrfToken
     };
 
-    return tokens;
+    var generateNewRt = function(){
+        console.info('New token created');
+        tokens.refreshToken = randToken.generate(16);
+        RefreshTokenStore.create(userId, tokens.refreshToken, (err) => {
+            if(err) return callback(err, null);
+            return callback(null, tokens);
+        });
+    }
+
+    //If an old refresh token was passed, delete it from database first.
+    if(oldRt){
+        RefreshTokenStore.deleteByToken(oldRt, (err, tokenDeleted) => {
+            if(err) return callback(err, null);
+            //If no token was deleted, it was already deleted by a parallel request and a new tokens have already been created.
+            if(!tokenDeleted){
+                console.info('Tokens had already been created');
+                tokens.accessToken = null;
+                tokens.refreshToken = null;
+                tokens.csrfToken = null;
+                return callback(null, tokens);
+            } else {
+                generateNewRt();
+            }
+        });
+    } else {
+        generateNewRt();
+    }
 }
 
 var setTokenCookies = function(res, tokens){
-    res.cookie('access-token', tokens.accessToken, {httpOnly: true/*, secure: true*/});
-    res.cookie('refresh-token', tokens.refreshToken, {httpOnly: true/*, secure: true*/});
-    res.cookie('csrf-token', tokens.csrfToken/*, {secure: true}*/);
+    if(tokens.accessToken) res.cookie('access-token', tokens.accessToken, {httpOnly: true/*, secure: true*/});
+    if(tokens.refreshToken) res.cookie('refresh-token', tokens.refreshToken, {httpOnly: true/*, secure: true*/});
+    if(tokens.csrfToken) res.cookie('csrf-token', tokens.csrfToken/*, {secure: true}*/);
 }
 
 module.exports = {

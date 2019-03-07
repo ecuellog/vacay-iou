@@ -7,7 +7,6 @@ var userSchema = new mongoose.Schema({
 		lowercase: true
 	},
 	passwordHash: String,
-	refreshTokenHash: String,
 	provider: String,
 	subject: String
 });

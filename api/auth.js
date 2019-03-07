@@ -64,18 +64,20 @@ router.post('/login', (req, res) => {
 		}
 		bcrypt.compare(password, user.passwordHash, (err, valid) => {
 			if(valid){
-				let newTokens = tokens.createNewTokens(user._id);
-                if(newTokens == null){
-                    return res.status(500).json({
-                        message: 'Error creating tokens'
-                    })
-                }
-                tokens.setTokenCookies(res, newTokens);
-				return res.status(200).json({
-					message: 'Login successful'
-				});
+				let newTokens = tokens.createNewTokens(user._id, null, (err, newTokens) => {
+                    if(err){
+                        console.error('Error creating tokens', err);
+                        return res.status(500).json({
+                            message: 'Error creating tokens'
+                        })
+                    }
+                    tokens.setTokenCookies(res, newTokens);
+                    return res.status(200).json({
+                        message: 'Login successful'
+                    });
+                });
 			} else {
-				return res.status(200).json({
+				return res.status(400).json({
 					message: 'Failed to log in'
 				});
 			}

@@ -8,7 +8,7 @@ var ledgerSchema = new mongoose.Schema({
 });
 
 ledgerSchema.statics.findCreated = function(userId, callback) {
-    return this.find({creator: userId}).exec(callback);
+    return this.find({ creator: userId }).exec(callback);
 }
 
 ledgerSchema.statics.findShared = function(userId, callback) {
