@@ -24,6 +24,10 @@ export class AuthService {
         return this.http.post(API_URL + '/auth/login', body/*, { withCredentials: true }*/)
     }
 
+    register(body){
+        return this.http.post(API_URL + '/auth/register', body);
+    }
+
     getUsers(){
         return this.http.get(API_URL + '/user');
     }

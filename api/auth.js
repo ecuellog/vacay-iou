@@ -20,7 +20,7 @@ router.post('/register', (req, res) => {
 
 	User.findByEmailLogin(email, (err, user) => {
 		if(user){
-			return res.status(200).json({
+			return res.status(400).json({
             	message: 'Email already in use'
 			});
 		}

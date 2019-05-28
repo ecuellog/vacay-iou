@@ -16,13 +16,15 @@ import { LedgerService } from './services/ledger.service';
 import { UserService } from './services/user.service';
 import { HttpTokenInterceptor } from './interceptors/http-token-interceptor';
 import { LedgerComponent } from './ledger/ledger.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    LedgerComponent
+    LedgerComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

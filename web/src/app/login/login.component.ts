@@ -8,14 +8,13 @@ import { AuthService } from '../services/auth.service';
     styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+    credentials: any = {};
 
     constructor(private authService:AuthService, private router:Router) {
         if(authService.isAuthenticated()){
             router.navigate(['dashboard']);
         }
     }
-
-    model: any = {};
 
     ngOnInit() {
         this.authService.getUsers().subscribe((users) => {
@@ -24,7 +23,7 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
-        this.authService.login(this.model).subscribe((res:any) => {
+        this.authService.login(this.credentials).subscribe((res:any) => {
             console.log(res.message);
             this.router.navigate(['dashboard']);
         });
