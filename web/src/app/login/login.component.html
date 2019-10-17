@@ -1,11 +1,9 @@
-<div>
+<div class="login">
     <h1> Login </h1>
     <form (ngSubmit)="login()">
-        <label>Email</label>
-        <input type="text" name="email" placeholder="Email" [(ngModel)]="credentials.email">
-        <label>Password</label>
-        <input type="password" name="password" placeholder="Password" [(ngModel)]="credentials.password">
-        <button type="submit">login</button>
+        <input class="short-input" type="text" name="email" placeholder="Email" [(ngModel)]="credentials.email"><br>
+        <input class="short-input" type="password" name="password" placeholder="Password" [(ngModel)]="credentials.password"><br>
+        <button class="primary-btn" type="submit">LOGIN</button>
         <br><br>
         <p>{{credentials.email}}</p>
     </form>
