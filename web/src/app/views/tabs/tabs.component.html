@@ -1,0 +1,8 @@
+<div class="d-flex flex-row">
+  <app-nav-side-dashboard></app-nav-side-dashboard>
+  <div class="tab-list px-3">
+    <div *ngFor="let tab of tabs" class="tab-item p-3 my-2">
+      <p>{{tab.name}}</p>
+    </div>
+  </div>
+</div>

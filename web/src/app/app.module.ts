@@ -1,8 +1,6 @@
 
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -15,8 +13,12 @@ import { AuthService } from './services/auth.service';
 import { LedgerService } from './services/ledger.service';
 import { UserService } from './services/user.service';
 import { HttpTokenInterceptor } from './interceptors/http-token-interceptor';
-import { LedgerComponent } from './ledger/ledger.component';
-import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './views/login/login.component';
+import { RegisterComponent } from './views/register/register.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LedgerComponent } from './components/ledger/ledger.component';
+import { TabsComponent } from './views/tabs/tabs.component';
+import { NavSideDashboardComponent } from './components/nav-side-dashboard/nav-side-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { RegisterComponent } from './register/register.component';
     LoginComponent,
     DashboardComponent,
     LedgerComponent,
-    RegisterComponent
+    RegisterComponent,
+    TabsComponent,
+    NavSideDashboardComponent
   ],
   imports: [
     BrowserModule,

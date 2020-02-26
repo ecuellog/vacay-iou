@@ -1,0 +1,14 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 100vh;
+  overflow-y: hidden;
+  background-color: #2B2E44;
+  color: white;
+  box-shadow: 3px 0px 10px 0px #00000038;
+}
+
+h4 {
+  letter-spacing: 1.2;
+}

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LedgerService } from '../services/ledger.service';
-import { UserService } from '../services/user.service';
+import { LedgerService } from '@/services/ledger.service';
+import { UserService } from '@/services/user.service';
 
 @Component({
     selector: 'app-dashboard',

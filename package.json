@@ -23,5 +23,9 @@
     "morgan": "^1.9.1",
     "path": "^0.12.7",
     "rand-token": "^0.4.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^0.900.2",
+    "@angular/cli": "^9.0.2"
   }
 }

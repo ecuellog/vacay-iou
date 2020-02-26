@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LedgerService } from '../services/ledger.service';
+import { LedgerService } from '@/services/ledger.service';
 
 @Component({
     selector: 'app-ledger',
