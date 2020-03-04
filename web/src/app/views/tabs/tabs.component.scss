@@ -1,8 +1,46 @@
 .tab-list {
   flex-grow: 1;
 }
+
 .tab-item {
+  display: flex;
+  justify-content: space-between;
   background-color: #2B2E44;
   color: white;
-  border-radius: 12px;
+  border-left: solid 2px #f64f7d;
+  //border-radius: 12px;  green 3ECC99
+  box-shadow: 0px 0px 10px 0px #00000038;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.tab-name {
+  font-size: 15px;
+  font-weight: bolder;
+  letter-spacing: 0.5px;
+}
+
+.tab-persons,
+.tab-modified-at {
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.tab-modified-at {
+  align-self: flex-end;
+}
+
+.options-section {
+  border-left: solid 1px #53566f;
+  .options-icon {
+    padding-left: 20px;
+    padding-right: 5px;
+  }
+}
+
+::ng-deep label {
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
 }

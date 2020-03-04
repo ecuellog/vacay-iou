@@ -13,6 +13,8 @@ var transactionSchema = new mongoose.Schema({
     amountCents: Number,
     //creator: String,        //For now, a single transaction can't be made without a ledger
     ledger: String
+}, {
+    timestamps: true
 });
 
 /*transactionSchema.statics.findByCreator = function(userId, callback){

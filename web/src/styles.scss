@@ -3,3 +3,45 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #242635;
 }
+
+/* Bootstrap override / Theme */
+.modal-content {
+  background-color: #2B2E44;
+  color: white;
+  border-radius: 0;
+  .app-modal-title {
+    text-align: center;
+    letter-spacing: 1.1px;
+    font-weight: bold;
+  }
+}
+
+.form-control {
+  border-color: #65788a;
+  background-color: rgb(32, 34, 46);
+  border-radius: 2px;
+  font-size: 0.9rem;
+  padding: 0rem .6rem;
+  &:focus {
+    color: inherit;
+    background-color: inherit;
+    border-color: inherit;
+    border: inherit;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  }
+}
+
+.btn {
+  border-radius: 2px;
+  font-size: 14px;
+  letter-spacing: 1.05px;
+  min-width: 80px;
+  text-transform: uppercase;
+}
+
+.btn-primary {
+  color: white;
+  background-color: #6929CC;
+  border-color: #6929CC;
+}

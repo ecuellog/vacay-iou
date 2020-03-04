@@ -9,6 +9,8 @@ var userSchema = new mongoose.Schema({
 	passwordHash: String,
 	provider: String,
 	subject: String
+}, {
+	timestamps: true
 });
 
 userSchema.statics.findBySubject = function(provider, subject, callback) {
