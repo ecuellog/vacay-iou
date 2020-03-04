@@ -4,6 +4,8 @@ body {
   background-color: #242635;
 }
 
+//green #35B099
+
 /* Bootstrap override / Theme */
 .modal-content {
   background-color: #2B2E44;
@@ -17,14 +19,18 @@ body {
 }
 
 .form-control {
+  color: #ffffff;
   border-color: #65788a;
-  background-color: rgb(32, 34, 46);
+  background-color: #414871;
   border-radius: 2px;
   font-size: 0.9rem;
   padding: 0rem .6rem;
+  ::placeholder {
+    color: #65788a;
+  }
   &:focus {
-    color: inherit;
-    background-color: inherit;
+    color: #ffffff;
+    background-color: #414871;
     border-color: inherit;
     border: inherit;
     outline: 0;
@@ -44,4 +50,16 @@ body {
   color: white;
   background-color: #6929CC;
   border-color: #6929CC;
+}
+
+.btn-secondary {
+  color: white;
+  background-color: #35B099;
+  border-color: #35B099;
+}
+
+.btn-pink {
+  color: white;
+  background-color: #f64f7d;
+  border-color: #f64f7d;
 }

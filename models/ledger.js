@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var ledgerSchema = new mongoose.Schema({
 	name: String,
 	creator: String,
-	persons: [{type: String, unique: true}],
+	persons: [String],
     sharedWith: [String]
 }, {
     timestamps: true

@@ -9,7 +9,7 @@
 </div>
 
 <!-- Create Modal -->
-<ng-template #createModal let-modal>
+<ng-template #createTabModal let-modal>
   <div class="modal-body">
     <h4 class="app-modal-title mb-4">Create Tab</h4>
     <form>
@@ -23,3 +23,15 @@
     </form>
   </div>
 </ng-template>
+
+
+<!-- Create Modal -->
+<ng-template #createModal let-modal>
+    <div class="modal-body">
+      <h4 class="app-modal-title mb-4">Create</h4>
+      <div class="d-flex flex-column align-items-center">
+        <button type="button" class="btn btn-pink create-option mb-3" (click)="modalService.open(createModal, {centered: true})">Tab</button>
+        <button type="button" class="btn btn-secondary create-option" (click)="modal.close('Save click')">Single Transaction</button>
+      </div>
+    </div>
+  </ng-template>
