@@ -48,41 +48,46 @@ router.post('/register', (req, res) => {
 //Email login only
 router.post('/login', (req, res) => {
 	let email = req.body.email;
-    let password = req.body.password;
+	let password = req.body.password;
 
-    if(!email || !password) {
-    	return res.status(400).json({
-    		message: 'Invalid request'
-    	});
-    }
+	if(!email || !password) {
+		return res.status(400).json({
+			message: 'Invalid request'
+		});
+	}
 	User.findByEmailLogin(email, (err, user) => {
-        if(err) return next(err);
+		if(err) return next(err);
 		if(!user){
 			return res.status(400).json({
-				message: 'Failed to log in'
+				message: 'Failed to log in. Invalid email or password'
 			});
 		}
 		bcrypt.compare(password, user.passwordHash, (err, valid) => {
 			if(valid){
 				let newTokens = tokens.createNewTokens(user._id, null, (err, newTokens) => {
-                    if(err){
-                        console.error('Error creating tokens', err);
-                        return res.status(500).json({
-                            message: 'Error creating tokens'
-                        })
-                    }
-                    tokens.setTokenCookies(res, newTokens);
-                    return res.status(200).json({
-                        message: 'Login successful'
-                    });
-                });
+					if(err){
+						console.error('Error creating tokens', err);
+						return res.status(500).json({
+							message: 'Server error'
+						})
+					}
+					tokens.setTokenCookies(res, newTokens);
+					return res.status(200).json({
+						user: {
+							_id: user._id,
+							name: user.name,
+							email: user.email
+						},
+						message: 'Login successful'
+					});
+				});
 			} else {
 				return res.status(400).json({
-					message: 'Failed to log in'
+					message: 'Failed to log in. Invalid email or password.'
 				});
 			}
 		});
 	});
 });
 
-module.exports = router
+module.exports = router;

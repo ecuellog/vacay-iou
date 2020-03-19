@@ -1,7 +1,7 @@
 <div class="sidebar p-2">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="m-0">Dashboard</h4>
-    <button class="btn btn-primary btn-sm" (click)="modalService.open(createModal, {centered: true})">Create</button>
+    <button class="btn btn-primary btn-sm" (click)="openModal(createModal)">Create</button>
   </div>
   <a>Tabs</a>
   <a>People</a>
@@ -15,10 +15,18 @@
     <form>
       <div class="form-group">
         <label for="name" class="mb-0">Tab name</label>
-          <input class="form-control mb-3" placeholder="Las Vegas Trip">
+        <input class="form-control mb-3" name="ledgerName" placeholder="Las Vegas Trip" [(ngModel)]="ledgerName">
         <label for="name" class="mb-0">People</label>
-          <input class="form-control" placeholder="Joe Smith">
-        <button type="button" class="btn btn-primary float-right mt-5" (click)="modal.close('Save click')">Save</button>
+        <div class="d-flex justify-content-between">
+          <input class="form-control" name="person" placeholder="Joe Smith" [(ngModel)]="person">
+          <button class="btn btn-outline-primary ml-3" (click)="addPerson()">Add</button>
+        </div>
+        <div class="person-list">
+          <span *ngFor="let person of persons; let i = index" (click)="deletePerson(i)">
+            {{person}}
+          </span>
+        </div>
+        <button type="button" class="btn btn-primary float-right mt-5" (click)="createLedger()">Save</button>
       </div>
     </form>
   </div>
@@ -27,11 +35,11 @@
 
 <!-- Create Modal -->
 <ng-template #createModal let-modal>
-    <div class="modal-body">
-      <h4 class="app-modal-title mb-4">Create</h4>
-      <div class="d-flex flex-column align-items-center">
-        <button type="button" class="btn btn-pink create-option mb-3" (click)="modalService.open(createModal, {centered: true})">Tab</button>
-        <button type="button" class="btn btn-secondary create-option" (click)="modal.close('Save click')">Single Transaction</button>
-      </div>
+  <div class="modal-body">
+    <h4 class="app-modal-title mb-4">Create</h4>
+    <div class="d-flex flex-column align-items-center">
+      <button type="button" class="btn btn-pink create-option mb-3" (click)="openModal(createTabModal)">Tab</button>
+      <button type="button" class="btn btn-secondary create-option" (click)="modal.close()">Single Transaction</button>
     </div>
-  </ng-template>
+  </div>
+</ng-template>

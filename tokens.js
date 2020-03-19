@@ -11,6 +11,10 @@ var checkTokens = function(req, res, next) {
     var accessToken = req.cookies['access-token'];
     var refreshToken = req.cookies['refresh-token'];
     var csrfToken = req.headers['x-csrf-token'];
+
+    console.log(accessToken);
+    console.info(refreshToken);
+    console.info(csrfToken);
     
     if (accessToken) {
         //Verify the access token
