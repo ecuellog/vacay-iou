@@ -8,7 +8,9 @@ var userSchema = new mongoose.Schema({
 	},
 	passwordHash: String,
 	provider: String,
-	subject: String
+	subject: String,
+	avatarColor: String,
+	avatarSrc: String
 }, {
 	timestamps: true
 });

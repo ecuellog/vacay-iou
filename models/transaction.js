@@ -3,8 +3,8 @@ var mongoose = require('mongoose');
 var transactionSchema = new mongoose.Schema({
     name: String,
     date: Date,
-    whoPaid: [String],        //Name of person
-    whoBenefited: [String],   //Name of person
+    whoPaid: [String],        //Id of friend
+    whoBenefited: [String],   //Id of friend
     type: {
         type: String,
         enum: ['expense', 'payment']

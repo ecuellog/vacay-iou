@@ -3,8 +3,8 @@ var mongoose = require('mongoose');
 var ledgerSchema = new mongoose.Schema({
 	name: String,
 	creator: String,
-	persons: [String],
-    sharedWith: [String]
+	participants: [Object],
+    sharedWith: [String]    //userIds
 }, {
     timestamps: true
 });
@@ -14,8 +14,7 @@ ledgerSchema.statics.findCreated = function(userId, callback) {
 }
 
 ledgerSchema.statics.findShared = function(userId, callback) {
-    //If the userID is in the extraUsers array, return it. Not sure if this will work yet.
-    return this.find({ sharedWith: userId }).exec(callback);
+    return this.find({ sharedWith: {$in: [userId]} }).exec(callback); 
 }
 
 module.exports = mongoose.model('Ledger', ledgerSchema);

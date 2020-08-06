@@ -88,6 +88,7 @@ router.post('/', tokens.checkTokens, (req, res, next) => {
     newTransaction.save(err => {
         if(err) return next(err);
         return res.status(200).json({
+            transaction: newTransaction,
             message: 'Transaction created.'
         });
     })
