@@ -4,11 +4,13 @@ var jwt = require('jsonwebtoken');
 var router = express.Router();
 var config = require('../config');
 var User = require('../models/user');
+var Friend = require('../models/friend');
 var RefreshTokenStore = require('../models/refreshTokenStore');
 var tokens = require('../tokens');
+var mongoose = require('mongoose');
 
 // Create new user
-router.post('/register', (req, res) => {
+router.post('/register', (req, res, next) => {
   let name = req.body.name;
   let email = req.body.email;
   let password = req.body.password;
@@ -26,22 +28,45 @@ router.post('/register', (req, res) => {
       });
     }
     let saltRounds = 10;
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-      var newUser = new User({
-        name: name,
-        email: email,
-        passwordHash: hash,
-        provider: 'email',
-        subject: 'none'
-      });
+    bcrypt.hash(password, saltRounds, async (err, hash) => {
+      let session = await mongoose.startSession();
+      session.startTransaction();
 
-      newUser.save(err => {
-        if(err) return next(err);
+      try {
+        let newUser = new User({
+          name: name,
+          email: email,
+          passwordHash: hash,
+          provider: 'email',
+          subject: 'none'
+        });
+
+        console.log(newUser);
+
+        await newUser.save({session});
+ 
+        await Friend.create([{
+          friendOf: newUser._id,
+          name: newUser.name,
+          email: newUser.email,
+          userId: newUser._id,
+          avatarColor: null,
+          avatarSrc: null
+        }], {session});
+
+        await session.commitTransaction();
+        session.endSession();
+
         return res.status(200).json({
           message: 'Sign up successful',
           user: newUser
         });
-      });
+      } catch(err) {
+        console.error(err);
+        session.abortTransaction();
+        session.endSession();
+        return next(err);
+      }
     });
   });
 });

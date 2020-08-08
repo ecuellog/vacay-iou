@@ -11,7 +11,8 @@ var friendSchema = new mongoose.Schema({
   avatarColor: String,
   avatarSrc: String
 }, {
-	timestamps: true
+	timestamps: true,
+	autoCreate: true
 });
 
 friendSchema.statics.findByFriendOf = function(friendOfId, callback) {

@@ -12,7 +12,8 @@ var userSchema = new mongoose.Schema({
 	avatarColor: String,
 	avatarSrc: String
 }, {
-	timestamps: true
+	timestamps: true,
+	autoCreate: true
 });
 
 userSchema.statics.findBySubject = function(provider, subject, callback) {
