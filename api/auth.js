@@ -41,8 +41,6 @@ router.post('/register', (req, res, next) => {
           subject: 'none'
         });
 
-        console.log(newUser);
-
         await newUser.save({session});
  
         await Friend.create([{
