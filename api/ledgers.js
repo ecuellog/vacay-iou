@@ -2,7 +2,9 @@ var express = require('express');
 var router = express.Router();
 var tokens = require('../tokens');
 var Ledger = require('../models/ledger');
+var Friend = require('../models/friend');
 var transactions = require('./transactions');
+var mongoose = require('mongoose');
 
 //Get all user created ledgers
 router.get('/created', tokens.checkTokens, (req, res) => {
@@ -38,22 +40,70 @@ router.get('/:ledgerId', (req, res) => {
 });
 
 //Create new ledger
-router.post('/', tokens.checkTokens, (req, res, next) => {
-    var newLedger = new Ledger({
-        name: req.body.name,
-        creator: req.decoded.user_id,
-        persons: req.body.persons,
-        sharedWith: [],
-        transactions: []
-    });
+router.post('/', tokens.checkTokens, async (req, res, next) => {
+    let session = await mongoose.startSession();
+    session.startTransaction();
 
-    newLedger.save(err => {
-        if(err) return next(err);
+    let ledgerParticipants = [];
+    let ledgerSharedWith = [];
+    let friendsToCreate = [];
+
+    try {
+        for(const participant of req.body.participants) {
+            if(!participant.friend) {
+                let newFriend = new Friend({
+                    friendOf: req.decoded.user_id,
+                    name: participant.name,
+                    email: participant.email,
+                    userId: null,
+                    avatarColor: null,
+                    avatarSrc: null
+                });
+
+                friendsToCreate.push(newFriend);
+
+                ledgerParticipants.push({
+                    friend: newFriend._id,
+                    invited: participant.invited
+                })
+                // TODO: send email invite
+            } else {
+                ledgerParticipants.push(participant);
+            }
+        }
+
+        ledgerParticipants.forEach(participant => {
+            if(!participant.invited) return;
+            if(participant.userId) {
+                ledgerSharedWith.push(participant.userId);
+                // Send email/push notification that a ledger has been shared
+            } else {
+                // Create email invite, send invite link to email
+            }
+        });
+
+        var newLedger = new Ledger({
+            name: req.body.name,
+            creator: req.decoded.user_id,
+            participants: ledgerParticipants,
+            sharedWith: ledgerSharedWith,
+            transactions: []
+        });
+
+        await newLedger.save({session});
+        await Friend.create(friendsToCreate, {session});
+
+        await session.commitTransaction();
+        session.endSession();
         return res.status(200).json({
             ledger: newLedger,
             message: 'Ledger created.'
         });
-    });
+    } catch(err) {
+        await session.abortTransaction();
+        session.endSession();
+        return next(err);
+    }
 });
 
 router.use('/:ledgerId/transactions', transactions);
