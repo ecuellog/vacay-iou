@@ -97,6 +97,7 @@ router.post('/', tokens.checkTokens, async (req, res, next) => {
         session.endSession();
         return res.status(200).json({
             ledger: newLedger,
+            newFriends: friendsToCreate,
             message: 'Ledger created.'
         });
     } catch(err) {
