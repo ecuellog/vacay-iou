@@ -6,7 +6,8 @@ var ledgerSchema = new mongoose.Schema({
 	participants: [Object],
     sharedWith: [String]    //userIds
 }, {
-    timestamps: true
+    timestamps: true,
+    autoCreate: true
 });
 
 ledgerSchema.statics.findCreated = function(userId, callback) {
