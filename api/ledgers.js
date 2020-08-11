@@ -5,6 +5,7 @@ var Ledger = require('../models/ledger');
 var Friend = require('../models/friend');
 var transactions = require('./transactions');
 var mongoose = require('mongoose');
+var avatarColors = require('../constants/avatarColors');
 
 //Get all user created ledgers
 router.get('/created', tokens.checkTokens, (req, res) => {
@@ -56,7 +57,7 @@ router.post('/', tokens.checkTokens, async (req, res, next) => {
                     name: participant.name,
                     email: participant.email,
                     userId: null,
-                    avatarColor: null,
+                    avatarColor: avatarColors.getRandomColor(),
                     avatarSrc: null
                 });
 

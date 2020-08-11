@@ -8,6 +8,7 @@ var Friend = require('../models/friend');
 var RefreshTokenStore = require('../models/refreshTokenStore');
 var tokens = require('../tokens');
 var mongoose = require('mongoose');
+var avatarColors = require('../constants/avatarColors');
 
 // Create new user
 router.post('/register', (req, res, next) => {
@@ -38,7 +39,9 @@ router.post('/register', (req, res, next) => {
           email: email,
           passwordHash: hash,
           provider: 'email',
-          subject: 'none'
+          subject: 'none',
+          avatarColor: avatarColors.getRandomColor(),
+          avatarSrc: null
         });
 
         await newUser.save({session});
@@ -48,7 +51,7 @@ router.post('/register', (req, res, next) => {
           name: newUser.name,
           email: newUser.email,
           userId: newUser._id,
-          avatarColor: null,
+          avatarColor: newUser.avatarColor,
           avatarSrc: null
         }], {session});
 
