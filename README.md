@@ -1,5 +1,5 @@
 # :palm_tree: vacay-iou
-A web application to track expenses between you and your friends. Users don't necessarily need to go on a beach vacation to use the application, but it's encouraged.
+A web API for a shared expenses app.
 
 ## To run (dev-mode):
 
@@ -8,7 +8,4 @@ A web application to track expenses between you and your friends. Users don't ne
 
 **Run the API server**  
 `nodemon` or `node server.js`
-
-**Run the Angular app**  
-`npm run ng-watch`
 
