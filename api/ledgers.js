@@ -49,6 +49,12 @@ router.post('/', tokens.checkTokens, async (req, res, next) => {
     let ledgerSharedWith = [];
     let friendsToCreate = [];
 
+    if (req.body.name === '') {
+        return res.status(400).json({
+            error: 'Tab name is required'
+        });
+    }
+
     try {
         for(const participant of req.body.participants) {
             if(!participant.friend) {
