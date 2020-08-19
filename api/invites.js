@@ -16,8 +16,8 @@ router.get('/:inviteId/accept', tokens.checkTokens, async (req, res) => {
     let friend = await Friend.findById(invite.friendId);
     let ledger = await Ledger.findById(invite.ledgerId);
 
-    friend.userId = req.decoded.userId;
-    ledger.sharedWith = [...ledger.sharedWith, req.decoded.userId];
+    friend.userId = req.decoded.user_id;
+    ledger.sharedWith = [...ledger.sharedWith, req.decoded.user_id];
 
     await friend.save({ session });
     await ledger.save({ session });
