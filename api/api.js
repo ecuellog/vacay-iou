@@ -10,4 +10,4 @@ router.use('/auth', auth);
 router.use('/ledgers', ledgers);
 router.use('/friends', friends);
 
-module.exports = router
+module.exports = router;

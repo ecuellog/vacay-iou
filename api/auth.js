@@ -16,14 +16,14 @@ router.post('/register', (req, res, next) => {
   let email = req.body.email;
   let password = req.body.password;
 
-  if(!name || !email || !password) {
+  if (!name || !email || !password) {
     return res.status(400).json({
       message: 'Invalid request'
     });
   }
 
   User.findByEmailLogin(email, (err, user) => {
-    if(user){
+    if (user) {
       return res.status(400).json({
         message: 'Email already in use'
       });
@@ -44,16 +44,21 @@ router.post('/register', (req, res, next) => {
           avatarSrc: null
         });
 
-        await newUser.save({session});
- 
-        await Friend.create([{
-          friendOf: newUser._id,
-          name: newUser.name,
-          email: newUser.email,
-          userId: newUser._id,
-          avatarColor: newUser.avatarColor,
-          avatarSrc: null
-        }], {session});
+        await newUser.save({ session });
+
+        await Friend.create(
+          [
+            {
+              friendOf: newUser._id,
+              name: newUser.name,
+              email: newUser.email,
+              userId: newUser._id,
+              avatarColor: newUser.avatarColor,
+              avatarSrc: null
+            }
+          ],
+          { session }
+        );
 
         await session.commitTransaction();
         session.endSession();
@@ -62,7 +67,7 @@ router.post('/register', (req, res, next) => {
           message: 'Sign up successful',
           user: newUser
         });
-      } catch(err) {
+      } catch (err) {
         console.error(err);
         session.abortTransaction();
         session.endSession();
@@ -77,26 +82,26 @@ router.post('/login', (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
 
-  if(!email || !password) {
+  if (!email || !password) {
     return res.status(400).json({
       message: 'Invalid request'
     });
   }
   User.findByEmailLogin(email, (err, user) => {
-    if(err) return next(err);
-    if(!user){
+    if (err) return next(err);
+    if (!user) {
       return res.status(400).json({
         message: 'Failed to log in. Invalid email or password'
       });
     }
     bcrypt.compare(password, user.passwordHash, (err, valid) => {
-      if(valid){
+      if (valid) {
         tokens.createNewTokens(user._id, null, (err, newTokens) => {
-          if(err){
+          if (err) {
             console.error('Error creating tokens', err);
             return res.status(500).json({
               message: 'Server error'
-            })
+            });
           }
           tokens.setTokenCookies(res, newTokens);
           return res.status(200).json({
@@ -118,13 +123,16 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/logout', tokens.checkTokens, (req, res, next) => {
-  RefreshTokenStore.deleteByToken(req.cookies['refresh-token'], (err, tokenDeleted) => {
-    if (err) return next();
-    tokens.deleteTokenCookies(res);
-    return res.status(200).json({
-      message: 'Logout successful'
-    });
-  });
+  RefreshTokenStore.deleteByToken(
+    req.cookies['refresh-token'],
+    (err, tokenDeleted) => {
+      if (err) return next();
+      tokens.deleteTokenCookies(res);
+      return res.status(200).json({
+        message: 'Logout successful'
+      });
+    }
+  );
 });
 
 module.exports = router;

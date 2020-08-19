@@ -42,7 +42,7 @@ const colors = [
   '#b52c46',
   '#e44949',
   '#da0014'
-]
+];
 
 function getRandomColor() {
   return colors[Math.floor(Math.random() * colors.length)];
@@ -51,4 +51,4 @@ function getRandomColor() {
 module.exports = {
   colors,
   getRandomColor
-}
+};
