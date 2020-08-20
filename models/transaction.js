@@ -4,8 +4,18 @@ var transactionSchema = new mongoose.Schema(
   {
     name: String,
     date: Date,
-    whoPaid: [String], //Id of friend
-    whoBenefited: [String], //Id of friend
+    whoPaid: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Friend'
+      }
+    ],
+    whoBenefited: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Friend'
+      }
+    ],
     type: {
       type: String,
       enum: ['expense', 'payment']
@@ -13,7 +23,10 @@ var transactionSchema = new mongoose.Schema(
     amountDollars: Number,
     amountCents: Number,
     //creator: String,        //For now, a single transaction can't be made without a ledger
-    ledger: String
+    ledger: {
+      type: Schema.Types.ObjectId,
+      ref: 'Ledger'
+    }
   },
   {
     timestamps: true

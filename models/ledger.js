@@ -3,9 +3,17 @@ var mongoose = require('mongoose');
 var ledgerSchema = new mongoose.Schema(
   {
     name: String,
-    creator: String,
+    creator: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
     participants: [Object],
-    sharedWith: [String] //userIds
+    sharedWith: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ] //userIds
   },
   {
     timestamps: true,

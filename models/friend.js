@@ -2,13 +2,19 @@ var mongoose = require('mongoose');
 
 var friendSchema = new mongoose.Schema(
   {
-    friendOf: String, // User id of who's friend this is
+    friendOf: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }, // User id of who's friend this is
     name: String,
     email: {
       type: String,
       lowercase: true
     },
-    userId: String, // User id of this friend if linked to an app user, null otherwise
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }, // User id of this friend if linked to an app user, null otherwise
     avatarColor: String,
     avatarSrc: String
   },
