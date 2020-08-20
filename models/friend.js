@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 var friendSchema = new mongoose.Schema(
   {

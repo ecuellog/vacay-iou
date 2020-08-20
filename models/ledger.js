@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const ObjectId = require('mongoose').Types.ObjectId;
 
 var ledgerSchema = new mongoose.Schema(
   {
@@ -7,7 +9,15 @@ var ledgerSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
-    participants: [Object],
+    participants: [
+      {
+        friend: {
+          type: Schema.Types.ObjectId,
+          ref: 'Friend'
+        },
+        invite: Boolean
+      }
+    ],
     sharedWith: [
       {
         type: Schema.Types.ObjectId,
@@ -22,11 +32,15 @@ var ledgerSchema = new mongoose.Schema(
 );
 
 ledgerSchema.statics.findCreated = function(userId, callback) {
-  return this.find({ creator: userId }).exec(callback);
+  return this.find({ creator: ObjectId(userId) })
+    .populate('participants.friend')
+    .exec(callback);
 };
 
 ledgerSchema.statics.findShared = function(userId, callback) {
-  return this.find({ sharedWith: { $in: [userId] } }).exec(callback);
+  return this.find({ sharedWith: { $in: [ObjectId(userId)] } })
+    .populate('participants.friend')
+    .exec(callback);
 };
 
 module.exports = mongoose.model('Ledger', ledgerSchema);

@@ -3,6 +3,7 @@ var router = express.Router({ mergeParams: true });
 var tokens = require('../tokens');
 var Transaction = require('../models/transaction');
 var Ledger = require('../models/ledger');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 /* Nested from /ledgers/:ledgerId/transactions */
 
@@ -17,7 +18,10 @@ router.get('/', tokens.checkTokens, (req, res, next) => {
         message: 'Ledger not found'
       });
     }
-    if (req.decoded.user_id !== ledger.creator) {
+    if (
+      ledger.creator.toString() !== req.decoded.user_id &&
+      !ledger.sharedWith.map(id => id.toString()).includes(req.decoded.user_id)
+    ) {
       return res.status(401).json({
         message: 'Unauthorized'
       });
@@ -43,7 +47,12 @@ router.get(
       tokens.checkTokens(req, res, () => {
         Ledger.findById(transaction.ledger, (err, ledger) => {
           if (err) return next(err);
-          if (req.decoded.user_id !== ledger.creator) {
+          if (
+            ledger.creator.toString() !== req.decoded.user_id &&
+            !ledger.sharedWith
+              .map(id => id.toString())
+              .includes(req.decoded.user_id)
+          ) {
             return res.status(401).json({
               message: 'Unauthorized'
             });
@@ -65,14 +74,15 @@ router.post(
   '/',
   tokens.checkTokens,
   (req, res, next) => {
-    //Verify if user owns this ledger (for later, + verify if ledger is shared with user and ledger is editable by user)
-    console.log('tokens checked');
-    console.log(req.params.ledgerId);
+    //Verify if user owns this ledger or is shared with
     Ledger.findById(req.params.ledgerId, (err, ledger) => {
-      console.log('finding ledger...');
-      console.log(err, ledger);
       if (err) return next(err);
-      if (ledger.creator !== req.decoded.user_id) {
+      if (
+        ledger.creator.toString() !== req.decoded.user_id &&
+        !ledger.sharedWith
+          .map(id => id.toString())
+          .includes(req.decoded.user_id)
+      ) {
         return res.status(401).json({
           message: 'Unauthorized'
         });
