@@ -63,9 +63,22 @@ router.post('/register', (req, res, next) => {
         await session.commitTransaction();
         session.endSession();
 
-        return res.status(200).json({
-          message: 'Sign up successful',
-          user: newUser
+        tokens.createNewTokens(newUser._id, null, (err, newTokens) => {
+          if (err) {
+            console.error('Error creating tokens', err);
+            return res.status(500).json({
+              message: 'Server error'
+            });
+          }
+          tokens.setTokenCookies(res, newTokens);
+          return res.status(200).json({
+            user: {
+              _id: newUser._id,
+              name: newUser.name,
+              email: newUser.email
+            },
+            message: 'Sign up successful'
+          });
         });
       } catch (err) {
         console.error(err);

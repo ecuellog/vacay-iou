@@ -76,7 +76,6 @@ router.post('/', tokens.checkTokens, async (req, res, next) => {
           friend: newFriend._id,
           invited: participant.invited
         });
-        // TODO: send email invite
       } else {
         ledgerParticipants.push(participant);
       }
@@ -93,6 +92,7 @@ router.post('/', tokens.checkTokens, async (req, res, next) => {
     for (const participant of ledgerParticipants) {
       if (!participant.invite) continue;
       if (participant.userId) {
+        // This is wrong TODO
         ledgerSharedWith.push(participant.userId);
         // Send email/push notification that a ledger has been shared
       } else {
