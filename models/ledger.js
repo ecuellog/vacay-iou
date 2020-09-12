@@ -31,6 +31,12 @@ var ledgerSchema = new mongoose.Schema(
   }
 );
 
+ledgerSchema.statics.findById = function(id, callback) {
+  return this.findOne({ _id: ObjectId(id) })
+    .populate('participants.friend')
+    .exec(callback);
+}
+
 ledgerSchema.statics.findCreated = function(userId, callback) {
   return this.find({ creator: ObjectId(userId) })
     .populate('participants.friend')

@@ -115,10 +115,16 @@ router.post('/', tokens.checkTokens, async (req, res, next) => {
     await session.commitTransaction();
     session.endSession();
 
-    return res.status(200).json({
-      ledger: newLedger,
-      newFriends: friendsToCreate,
-      message: 'Ledger created.'
+    // Ledger with all the friend objects populated
+    Ledger.findById(newLedger._id, (err, ledger) => {
+      if (err) {
+        return res.status(500).json({ error: err });
+      }
+      return res.status(200).json({
+        ledger: ledger,
+        newFriends: friendsToCreate,
+        message: 'Ledger created.'
+      });
     });
   } catch (err) {
     await session.abortTransaction();
