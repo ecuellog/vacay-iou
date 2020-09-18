@@ -4,9 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "ng-watch": "cd web && ng build web --outputPath='../public' --watch=true",
-    "ng-build": "cd web && ng build web --outputPath='../public' --prod"
+    "start": "node server.js"
   },
   "author": "Edgardo Cuello",
   "license": "ISC",
