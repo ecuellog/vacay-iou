@@ -7,13 +7,19 @@ var mongoose = require('mongoose');
 var morgan = require('morgan');
 var cors = require('cors');
 var app = express();
-var port = 3000;
 var api = require('./api/api');
+
+// Load environment variables
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+var port = process.env.PORT || 3000;
 
 // Database connection
 mongoose
   .connect(
-    'mongodb+srv://admin:HYfOORa0cj20bsat@vacayiou-x4osx.mongodb.net/test?retryWrites=true',
+    process.env.MONGO_CONNECTION_STRING,
     { useNewUrlParser: true }
   )
   .then(() => {
@@ -42,18 +48,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Config Cross Origin Requests
-app.use(cors({ credentials: true, origin: 'http://localhost:3001' }));
+app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }));
 
 // Routes
-app.get('/', function(req, res, next) {
-  res.send('Landing page');
-});
-
-app.get('/app*', function(req, res, next) {
-  res.sendFile(path.join(__dirname, 'public/index.html'));
-});
-
-app.use('/api', api);
+app.use('/', api);
 
 // Error handling
 app.use(function(err, req, res, next) {
