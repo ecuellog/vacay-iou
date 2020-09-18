@@ -48,7 +48,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Config Cross Origin Requests
-app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }));
+app.use(cors());
 
 // Routes
 app.use('/', api);
