@@ -133,14 +133,18 @@ var createNewTokens = function(userId, oldRt, callback) {
 var setTokenCookies = function(res, tokens) {
   if (tokens.accessToken)
     res.cookie('access-token', tokens.accessToken, {
-      httpOnly: true /*, secure: true*/
+      httpOnly: true, /*, secure: true*/
+      domain: process.env.DOMAIN_FOR_COOKIES
     });
   if (tokens.refreshToken)
     res.cookie('refresh-token', tokens.refreshToken, {
-      httpOnly: true /*, secure: true*/
+      httpOnly: true, /*, secure: true*/
+      domain: process.env.DOMAIN_FOR_COOKIES
     });
   if (tokens.csrfToken)
-    res.cookie('csrf-token', tokens.csrfToken /*, {secure: true}*/);
+    res.cookie('csrf-token', tokens.csrfToken, {
+      domain: process.env.DOMAIN_FOR_COOKIES
+    });
 };
 
 var deleteTokenCookies = function(res) {
